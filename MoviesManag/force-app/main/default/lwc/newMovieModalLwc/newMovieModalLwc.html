@@ -1,0 +1,97 @@
+<template>
+    <template if:true={showCreateMovieModal}>
+        <div class="slds-modal slds-fade-in-open slds-backdrop">  
+          <div class="slds-modal__container"> 
+
+            <!--HEADER Section--> 
+            <div class="slds-modal__header">  
+                <lightning-button-icon icon-name="utility:close" alternative-text="Close this window" size="large"  
+                  variant="bare-inverse" onclick={closeModal} class="slds-modal__close">  
+                </lightning-button-icon>  
+                <h2>New Movie</h2>  
+            </div>  
+       
+
+          <!--Body Section--> 
+         
+          <div class="slds-modal__content slds-p-around_medium">  
+
+            <div class="slds-p-around_medium lgc-bg">
+              <lightning-input type="text" onchange={changeName} label="Movie's name"></lightning-input>
+            </div>
+          
+
+            <div class="slds-p-around_medium lgc-bg">
+              <lightning-textarea name="desc"  onchange={changeDesc} label="Description" ></lightning-textarea>
+            </div>
+
+            <lightning-input type="date" name="input2" label="Release date" onchange={changeReleaseDate} ></lightning-input>
+
+            <lightning-record-edit-form object-api-name="Movie__c">
+              <div style="display: flex;align-items: center;">
+                
+                    <div style="flex-grow: 1;max-width:90%">
+                        <lightning-input-field field-name={categories} value={category}  onchange={chooseCategory}>
+                        </lightning-input-field>
+                    </div>
+              </div>
+            </lightning-record-edit-form>
+
+            <lightning-record-edit-form object-api-name="MovieActor__c">
+              <div style="display: flex;align-items: center;">
+
+                    <div style="flex-grow: 1;max-width:90%">
+                        <lightning-input-field field-name={actors} value={currentActor} onchange={chooseActor}>
+                        </lightning-input-field>
+                    </div>
+
+                    <lightning-button variant="success" label="+" title="add actor" onclick={addActor} class="slds-m-left_x-small">
+                    </lightning-button>
+              </div>
+            </lightning-record-edit-form>
+          <template for:each={movieActors} for:item="actor">
+          
+            <lightning-record-edit-form object-api-name="Actor__c" key={actor} record-id={actor}>
+
+              <div style="display: flex;align-items: center;">
+
+                <div style="flex-grow: 1;max-width:90%">
+                    <lightning-input-field field-name={name} readonly="true">
+                    </lightning-input-field>
+                </div>
+
+                <lightning-button variant="destructive" value={actor} label="-" title="Successful action" onclick={removeActor} class="slds-m-left_x-small">
+                </lightning-button>
+              </div>
+
+            </lightning-record-edit-form>
+
+          </template>
+
+          <div class="rate">
+            <input type="radio" id="star5" name={name} value="5" onchange={rating} />
+            <label for="star5"></label>
+            <input type="radio" id="star4" name={name} value="4" onchange={rating} />
+            <label for="star4"></label>
+            <input type="radio" id="star3" name={name} value="3" onchange={rating} />
+            <label for="star3" title="text"></label>
+            <input type="radio" id="star2" name={name} value="2" onchange={rating} />
+            <label for="star2"></label>
+            <input type="radio" id="star1" name={name} value="1" onchange={rating} />
+            <label for="star1"></label>
+        </div>
+
+          </div> 
+          
+          <!--Footer Section-->  
+         <div class="slds-modal__footer">  
+            <lightning-button label="New" variant="brand" onclick={createMovie}>  
+            </lightning-button>  
+          </div> 
+
+        </div> 
+        </div>
+    </template>
+ 
+    
+</template>
