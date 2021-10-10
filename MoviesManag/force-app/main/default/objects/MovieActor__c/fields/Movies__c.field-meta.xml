@@ -6,7 +6,7 @@
     <referenceTo>Movie__c</referenceTo>
     <relationshipLabel>MoviesActors</relationshipLabel>
     <relationshipName>MoviesActors</relationshipName>
-    <relationshipOrder>0</relationshipOrder>
+    <relationshipOrder>1</relationshipOrder>
     <reparentableMasterDetail>false</reparentableMasterDetail>
     <trackTrending>false</trackTrending>
     <type>MasterDetail</type>

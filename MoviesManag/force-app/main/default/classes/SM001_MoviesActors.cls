@@ -9,7 +9,7 @@ public with sharing class SM001_MoviesActors {
 
          Movie__c newMovieToinsert = new Movie__c();
 
-         newMovieToinsert.Name = newMovie.name;
+        /* newMovieToinsert.Name = newMovie.name;
          newMovieToinsert.category__c = newMovie.category;
          newMovieToinsert.Description__c = newMovie.description;
          newMovieToinsert.Rating__c = newMovie.rating;
@@ -28,9 +28,20 @@ public with sharing class SM001_MoviesActors {
             movieActorsToinsert.add(movieActor);
 
          }
-        insert movieActorsToinsert;
+        insert movieActorsToinsert;*/
 
     
+    }
+
+    @AuraEnabled
+    public static List<Movie__c> getMoviesByKey(String movieName){
+            System.debug('movieName'+movieName);
+            return DM001_MoviesActors.getMoviesByKey(movieName); 
+    }
+
+    @AuraEnabled(Cacheable=true)
+    public static List<Movie__c> getAllMovies(){      
+            return DM001_MoviesActors.getAllMovies();   
     }
 
 
