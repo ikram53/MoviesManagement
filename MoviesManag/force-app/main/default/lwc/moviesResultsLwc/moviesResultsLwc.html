@@ -7,34 +7,38 @@
         </div>
 
       </template>-->
-      <lightning-card title="Catalog" icon-name="standard:catalog">
-
-        <lightning-layout multiple-rows horizontal-align="center">
+      <br>
+        <lightning-layout multiple-rows="true">
           <template for:each={movies} for:item="movie">
-            <lightning-layout-item key={movie.Id} size="12" onclick={getId} value={movie.Id} small-device-size="6" medium-device-size="4"
-                large-device-size="3">
+            <lightning-layout-item key={movie.Id} size="12"  small-device-size="6" medium-device-size="4"
+                large-device-size="3" padding="around-small">
                 <!--MovieTile-->
-                <div class="slds-var-p-around_small">
-                  <div class="slds-container_fluid image"></div>
+             
+              <article class="slds-tile slds-box" onclick={getCurrentMovie}>
+                    <h2 class="slds-tile__title">{movie.Name}
 
-                    <h1 class="slds-var-p-around_xx-small slds-var-m-top_x-small slds-truncate slds-text-title_caps bold-text">
-                      {movie.Name}
-                    </h1>
-                    <h2 class="slds-var-p-around_xx-small slds-text-body_regular">
-                      <lightning-layout>
-                        <lightning-layout-item size="6" class="slds-var-p-right_xx-small">
-                          Category :&nbsp;{movie.Category__c}
-                        </lightning-layout-item>
-                        <lightning-layout-item size="6" class="slds-var-p-right_xx-small" value={movie.rating_pic__c}>
-                          Rating :&nbsp;
-                          <lightning-formatted-rich-text  value={movie.rating_pic__c}>p</lightning-formatted-rich-text>
-                        </lightning-layout-item>
-                      </lightning-layout>
                     </h2>
-                </div>
+                    <div class="slds-tile__detail">
+
+                      <dl class="slds-list_horizontal slds-wrap">
+                        <dt class="slds-item_label slds-form-element__legend" title="Category">Category: </dt>
+                        <dd class="slds-item_detail" title="Description for category">{movie.Category__c}</dd>
+                        <dt class="slds-item_label slds-form-element__legend" title="Second Label">Rating: </dt>
+                        <dd class="slds-item_detail" title="Description for second label">
+                           <lightning-formatted-rich-text  value={movie.rating_pic__c}></lightning-formatted-rich-text>
+                        </dd>
+                      </dl>
+
+                  </div>
+                </article>
+           
+              
             </lightning-layout-item>
         </template>
         </lightning-layout>
-      </lightning-card>
+       
+        <template if:true={showMoviePreview}>
+          <c-movie-preview-lwc  show-movie-preview={showMoviePreview} record-id={currentmovie}></c-movie-preview-lwc>
+        </template>
         
     </template>

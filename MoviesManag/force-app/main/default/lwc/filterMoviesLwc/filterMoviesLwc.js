@@ -4,6 +4,7 @@ export default class FilterMoviesLwc extends LightningElement {
 
     showCreateMovieModal = false;
     movieName='';
+    
 
     createMovie(){
       this.showCreateMovieModal = true;

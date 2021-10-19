@@ -1,7 +1,7 @@
 import { LightningElement,track,api } from 'lwc';
-import ACTORS from "@salesforce/schema/MovieActor__c.Actor__c"
+//import ACTORS from "@salesforce/schema/MovieActor__c.Actor__c"
 import NAME from "@salesforce/schema/Actor__c.Name"
-import MoviesCategories from "@salesforce/schema/Movie__c.Category__c"
+//import MoviesCategories from "@salesforce/schema/Movie__c.Category__c"
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import createNewMovie from '@salesforce/apex/SM001_MoviesActors.createMovie';
 
@@ -13,7 +13,7 @@ export default class NewMovieModalLwc extends LightningElement {
     @track name = NAME;
     @track categories = MoviesCategories;
 
-    // Toast optionsÒ
+    // Toast options
     title = '';
     message = '';
     variant = '';
@@ -64,7 +64,6 @@ export default class NewMovieModalLwc extends LightningElement {
     
     closeModal() {
         this.showCreateMovieModal = false;
-
         const selectedEvent = new CustomEvent('shareclosed', { });
         this.dispatchEvent(selectedEvent);
     }
@@ -120,7 +119,13 @@ export default class NewMovieModalLwc extends LightningElement {
         console.log(JSON.stringify(this.newMovie));
         createNewMovie({newMovie:this.newMovie ,movieActorsIds:JSON.stringify(this.movieActors)})
                    .then(result =>{
+                       this.title = 'New Movie';
+                       this.message = 'You have successfly create a movie';
+                       this.variant = 'success';
+                       this.showCreateMovieModal = false;
+                       this.showNotification();
                        console.log('result'+result);
+                       window.location.reload();
                    })
                    .catch(error =>{
                        console.log('error'+error);

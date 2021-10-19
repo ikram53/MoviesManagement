@@ -9,7 +9,7 @@ public with sharing class SM001_MoviesActors {
 
          Movie__c newMovieToinsert = new Movie__c();
 
-        /* newMovieToinsert.Name = newMovie.name;
+         newMovieToinsert.Name = newMovie.name;
          newMovieToinsert.category__c = newMovie.category;
          newMovieToinsert.Description__c = newMovie.description;
          newMovieToinsert.Rating__c = newMovie.rating;
@@ -28,7 +28,7 @@ public with sharing class SM001_MoviesActors {
             movieActorsToinsert.add(movieActor);
 
          }
-        insert movieActorsToinsert;*/
+        insert movieActorsToinsert;
 
     
     }
