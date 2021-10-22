@@ -1,108 +1,80 @@
 <template>
- 
   <template if:true={showMoviePreview}>
-   <!-- <div class="slds-modal slds-fade-in-open slds-backdrop">  
-        <div class="slds-modal__container">        
-            <div class="slds-modal__header">  
-                <lightning-button-icon icon-name="utility:close" alternative-text="Close this window" size="large"  
-                  variant="bare-inverse" onclick={closeModal} class="slds-modal__close">  
-                </lightning-button-icon>    
-            </div>  
-   
-            <div class="slds-modal__content slds-p-around_medium">
-                    <div class="slds-float_left">
-                        <lightning-record-view-form
-                            object-api-name={objectApiName}
-                            record-id={recordId}>
-                                <lightning-output-field
-                                    field-name={name}>
-                                </lightning-output-field>
-                                <lightning-output-field
-                                    field-name={description}>
-                                </lightning-output-field>
-                                <lightning-output-field
-                                    field-name={rating}>/5
-                                </lightning-output-field>
-                                <lightning-output-field
-                                    field-name={category}>
-                                </lightning-output-field>
-                        </lightning-record-view-form>
-                    </div> 
-                    <br><br><br>
-                    
-            </div>
-             Footer Section
-            <div class="slds-modal__footer">  
-
-                <lightning-button label="Update" variant="brand" onclick={updateMovie}>  
-                </lightning-button> 
-
-                <lightning-button label="Delete"  variant="destructive" onclick={deleteMovie}>  
-                </lightning-button>  
-            
-            </div> 
-        </div>
-    </div>-->
     <lightning-card title="View Record">
-        
-        <lightning-record-view-form object-api-name={objectApiName} record-id={recordId}>
+        <div class="slds-var-m-around_medium">
+            <lightning-record-view-form object-api-name={objectApiName} record-id={recordId}>
 
-            <lightning-output-field field-name={name}></lightning-output-field>
-            <lightning-output-field field-name={description}></lightning-output-field>
-            <lightning-output-field field-name={rating}></lightning-output-field>
-            <lightning-output-field field-name={category}></lightning-output-field>
+                <lightning-output-field class="slds-align_absolute-center" field-name={moviePic} variant="label-hidden"></lightning-output-field>
+                <lightning-output-field field-name={name} variant="label-inline"></lightning-output-field>
+                <lightning-output-field field-name={description} variant="label-inline"></lightning-output-field>
+                <lightning-output-field field-name={rating} variant="label-inline"></lightning-output-field>
+                <lightning-output-field field-name={category} variant="label-inline"></lightning-output-field>
 
-        </lightning-record-view-form>
+             </lightning-record-view-form>
+        </div>
+        <lightning-button label="Delete" variant="destructive" onclick={deleteMovie}></lightning-button>
+        <lightning-button label="Update" variant="brand" onclick={updateMovie}></lightning-button> 
     </lightning-card>
-
-    <br><br><br>
-    <lightning-button label="Delete" variant="destructive" onclick={deleteMovie}></lightning-button>
-    <lightning-button label="Update" variant="brand" onclick={updateMovie}></lightning-button> 
     
   </template>
 
   <template if:true={showUpdateMovie}>
-    <div class="slds-p-horizontal_small">
-        <lightning-record-edit-form 
-                                object-api-name={objectApiName}
-                                record-id={recordId}
-                                onsuccess={handleSuccess}
-                                onerror={handleError}>
-                <lightning-layout multiple-rows>
+    <lightning-card title="View Record">
+        <div class="slds-p-horizontal_small">
+            <lightning-record-edit-form 
+                                    object-api-name={objectApiName}
+                                    record-id={recordId}
+                                    onsuccess={handleSuccess}
+                                    onerror={handleError}>
+                    <lightning-layout multiple-rows>
 
-                    <!--Whenever a system error occur like validation rule-->
-                    <lightning-layout-item size="12">
-                        <lightning-messages></lightning-messages>
-                    </lightning-layout-item>
+                        <!--Whenever a system error occur like validation rule-->
+                        <lightning-layout-item size="12">
+                            <lightning-messages></lightning-messages>
+                        </lightning-layout-item>
 
-                    <lightning-layout-item size="12">
-                        <lightning-input-field  field-name={name}></lightning-input-field>
-                    </lightning-layout-item>
-                    <lightning-layout-item size="12">
-                        <lightning-input-field field-name={description}></lightning-input-field>
-                    </lightning-layout-item>
-                    <lightning-layout-item size="12">
-                       <lightning-input-field field-name={rating}></lightning-input-field>
-                    </lightning-layout-item>
-                    <lightning-layout-item size="12">
-                       <lightning-input-field field-name={category}></lightning-input-field>
-                    </lightning-layout-item>
+                        <lightning-layout-item size="12">
 
-                    <lightning-layout-item size="12" class="slds-align_absolute-center">
-                        <lightning-button
-                          label="Cancel"
-                          class="slds-m-right_small"
-                          onclick={resetForm}
-                        ></lightning-button>
-                        <lightning-button
-                          type="submit"
-                          variant="brand"
-                          label="Save"
-                        ></lightning-button>
-                    </lightning-layout-item>
-                </lightning-layout>
-        </lightning-record-edit-form>
-        
-    </div> 
+                            <lightning-input type="file" 
+                                 accept=".jpg, .jpeg, .tif, .png"
+                                 label="Movie Picture" onchange={openfileUpload}>
+                             </lightning-input>
+          
+                            <template if:true={fileData}>
+                                <p>{fileData.filename}</p>
+                            </template>
+                        </lightning-layout-item>
+
+                        <lightning-layout-item size="12">
+                            <lightning-input-field  field-name={name}></lightning-input-field>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12">
+                            <lightning-input-field field-name={description}></lightning-input-field>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12">
+                        <lightning-input-field field-name={rating}></lightning-input-field>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12">
+                        <lightning-input-field field-name={category}></lightning-input-field>
+                        </lightning-layout-item>
+
+                        <lightning-layout-item size="12" class="slds-align_absolute-center">
+                            <lightning-button
+                            label="Cancel"
+                            class="slds-m-right_small"
+                            onclick={resetForm}
+                            ></lightning-button>
+                            <lightning-button
+                            type="submit"
+                            variant="brand"
+                            label="Save"
+                            onclick={updateMoviePic}
+                            ></lightning-button>
+                        </lightning-layout-item>
+                    </lightning-layout>
+            </lightning-record-edit-form>
+            
+        </div> 
+    </lightning-card>
   </template>
 </template>

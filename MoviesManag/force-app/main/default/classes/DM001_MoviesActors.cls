@@ -17,12 +17,21 @@ public with sharing class DM001_MoviesActors {
         return moviesResult;
 
     }
+
+
     @AuraEnabled(Cacheable=false)
     public static List<Movie__c> getAllMovies(){
  
-        List<Movie__c> moviesResult= [Select Name,category__c,rating_pic__c from Movie__c ];
+        List<Movie__c> moviesResult= [Select Name,category__c,rating_pic__c,movie_s_pic__c from Movie__c ];
         return moviesResult;
 
+    }
+
+    public static Id getContentDocumentId(Id contentVersionId){
+           return [ SELECT ContentDocumentId 
+                    FROM ContentVersion 
+                    WHERE Id =: contentVersionId
+                  ].ContentDocumentId;
     }
 
 

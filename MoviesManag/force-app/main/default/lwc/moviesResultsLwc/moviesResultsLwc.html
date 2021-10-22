@@ -10,14 +10,19 @@
       <br>
         <lightning-layout multiple-rows="true">
           <template for:each={movies} for:item="movie">
-            <lightning-layout-item key={movie.Id} size="12"  small-device-size="6" medium-device-size="4"
-                large-device-size="3" padding="around-small">
+            <lightning-layout-item key={movie.Id} data-id={movie.Id} size="12"  small-device-size="6" medium-device-size="4"
+                large-device-size="3" padding="around-small" onclick={getCurrentMovie}>
                 <!--MovieTile-->
              
-              <article class="slds-tile slds-box" onclick={getCurrentMovie}>
-                    <h2 class="slds-tile__title">{movie.Name}
+              <article class="slds-tile slds-box">
 
-                    </h2>
+                      <h1 class="slds-var-p-around_xx-small slds-var-m-top_x-small slds-text-title_caps bold-text">
+                        {movie.Name}
+                      </h1>
+                      <div class="slds-container_fluid image">
+                          <lightning-formatted-rich-text style="height:300px" value={movie.movie_s_pic__c}></lightning-formatted-rich-text> 
+                      </div>
+                    
                     <div class="slds-tile__detail">
 
                       <dl class="slds-list_horizontal slds-wrap">
@@ -37,8 +42,8 @@
         </template>
         </lightning-layout>
        
-        <template if:true={showMoviePreview}>
+        <!--<template if:true={showMoviePreview}>
           <c-movie-preview-lwc  show-movie-preview={showMoviePreview} record-id={currentmovie}></c-movie-preview-lwc>
-        </template>
+        </template>-->
         
     </template>

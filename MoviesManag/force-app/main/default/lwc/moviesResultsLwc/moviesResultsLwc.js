@@ -1,70 +1,77 @@
 import { LightningElement,track ,wire,api} from 'lwc';	
 import { NavigationMixin } from 'lightning/navigation';
+import { refreshApex } from '@salesforce/apex';
 import getMoviesByKey from '@salesforce/apex/SM001_MoviesActors.getMoviesByKey';
 import getAllMovies from '@salesforce/apex/SM001_MoviesActors.getAllMovies';
 
-export default class MoviesResultsLwc extends LightningElement {
+export default class MoviesResultsLwc extends  NavigationMixin(LightningElement) {
     @api movieName;
-    movies=[];
+    @track movies=[];
+    @track wiredMovie;
     currentmovie='';
 
     showMoviePreview = false;
+
+
+    connectedCallback() {
+        refreshApex(this.wiredMovie);
+    }
 
     handlemovieNameChange(event){
         this.movieName = event.target.value;
     }
 
-  @wire(getAllMovies)
-  wiredMovies({ error, data }) {
-        if (data) {
-            console.log('data'+data[0].rating_pic__c);
-            this.movies = data;
-        } else if (error) {
-            this.error = error;
-        }
-    }
-  @api
-  searchMovies(searchKey) {
-   this.getMoviesByKey(searchKey);
-  }
-
-  getMoviesByKey(searchKey){
-
-        getMoviesByKey({ movieName: searchKey })
-        .then(result => {
-            this.movies = result;
-            console.log(this.movies);
-        })
-        .catch(error => {
-            this.error = error;
-        });
-  }
-  
-  getCurrentMovie(event){
-      console.log('******');
-      console.log(event.target.value);
-      this.currentmovie='a018E00000ErTZNQA3';
-      this.showMoviePreview = true;
-       
-     
-  }
-
-  toMoviePreview(event){
-        console.log('getCurrentMovie');
-        console.log(event.target.value);
-        this.currentmovie='a018E00000ErTZNQA3';
-        this.showMoviePreview = true;
-        this[NavigationMixin.Navigate]({
-            type: 'standard__component',
-            attributes: {
-                componentName: 'c-movie-preview-lwc'
-            },
-            state: {
-                recordId: 'a018E00000ErTZNQA3'
+    @wire(getAllMovies)
+    wiredMovies(result) {
+        this.wiredMovie=result;
+        console.log('wiredMovieeeeees ***');
+            if (this.wiredMovie.data) {
+                console.log(this.wiredMovie.data);
+                this.movies = this.wiredMovie.data;
+            } else if (this.wiredMovie.error) {
+                this.error = this.wiredMovie.error;
             }
-        });
-     }
+        }
+
+    @api
+    searchMovies(searchKey) {
+      this.getMoviesByKey(searchKey);
     }
+
+    getMoviesByKey(searchKey){
+
+            getMoviesByKey({ movieName: searchKey })
+            .then(result => {
+                this.movies = result;
+                console.log(this.movies);
+            })
+            .catch(error => {
+                this.error = error;
+            });
+    }
+
+    
+    
+    getCurrentMovie(event){
+        console.log('getCurrentMovie');
+
+        this.currentmovie=event.currentTarget.dataset.id;
+        this[NavigationMixin.Navigate]({
+            type: 'standard__navItemPage',
+                attributes: {
+                    apiName: 'Movie_Preview'
+                },
+                state: {
+                    c__recordId: this.currentmovie
+                }
+            }); 
+    }
+
+    
+
+    
+     
+}
     
 
 
