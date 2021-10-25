@@ -12,6 +12,7 @@ export default class NewMovieModalLwc extends LightningElement {
     @track actors = ACTORS;
     @track name = NAME;
     @track categories = MoviesCategories;
+    @track loading = false;
 
     // Toast options
     title = '';
@@ -119,16 +120,17 @@ export default class NewMovieModalLwc extends LightningElement {
     }
 
     createMovie(){
-        console.log('createMovie');
+        this.loading = true;
         createNewMovie({newMovie:this.newMovie ,movieActorsIds:JSON.stringify(this.movieActors),base64:this.fileData.base64,filename:this.fileData.filename})
                    .then(result =>{
-                      
+        
                        this.title = 'New Movie';
                        this.message = 'You have successfly create a movie';
                        this.variant = 'success';
                        this.showCreateMovieModal = false;
                        this.showNotification();
-                      // window.location.reload();
+                       this.loading = false;
+                       window.location.reload();
                    })
                    .catch(error =>{
                        console.log(error);
@@ -139,6 +141,7 @@ export default class NewMovieModalLwc extends LightningElement {
     /* */
     openfileUpload(event) {
         const file = event.target.files[0]
+        this.showLoadingSpinner = true;
             var reader = new FileReader()
             reader.onload = () => {
                 var base64 = reader.result.split(',')[1]

@@ -1,9 +1,9 @@
 <template>
   
   <template if:true={showCreateMovieModal}>
+    
       <div class="slds-modal slds-fade-in-open slds-backdrop">  
         <div class="slds-modal__container"> 
-
           <!--HEADER Section--> 
           <div class="slds-modal__header">  
               <lightning-button-icon icon-name="utility:close" alternative-text="Close this window" size="large"  
@@ -15,14 +15,18 @@
 
         <!--Body Section--> 
        
-    <div class="slds-modal__content slds-p-around_medium"> 
-        <div class="slds-grid slds-wrap"> 
+    <div class="slds-modal__content slds-p-around_medium slds-is-relative"> 
 
+        <template if:true={loading}>
+          <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+        </template>
+        
+        <div class="slds-grid slds-wrap"> 
           <div  class="slds-align_absolute-center slds-small-size--1-of-1 slds-medium-size--2-of-8 slds-large-size--2-of-12">
-            <label>Movie's name</label> 
+            <label>Movie's name <span style="color: red;"> *</span></label> 
           </div>  
           <div  class="slds-small-size--1-of-1 slds-medium-size--6-of-8 slds-large-size---10-of-12">
-            <lightning-input type="text" onchange={changeName}></lightning-input>
+            <lightning-input type="text" onchange={changeName}  variant="label-hidden" required></lightning-input>
           </div>  
 
           
@@ -35,21 +39,21 @@
 
 
           <div  class="slds-align_absolute-center slds-small-size--1-of-1 slds-medium-size--2-of-8 slds-large-size--2-of-12">
-            <label>Release date</label> 
+            <label>Release date<span style="color: red;"> *</span></label> 
           </div>  
           <div  class="slds-small-size--1-of-1 slds-medium-size--6-of-8 slds-large-size---10-of-12">
-            <lightning-input type="date" name="input2" onchange={changeReleaseDate} ></lightning-input>
+            <lightning-input type="date" name="input2" onchange={changeReleaseDate}  variant="label-hidden"  required></lightning-input>
           </div> 
 
 
          
           <div  class="slds-align_absolute-center slds-small-size--1-of-1 slds-medium-size--2-of-8 slds-large-size--2-of-12">
-            <label>Category</label> 
+            <label>Category <span style="color: red;"> *</span></label> 
           </div> 
           <div  class="slds-small-size--1-of-1 slds-medium-size--6-of-8 slds-large-size---10-of-12">
             <br/>
             <lightning-record-edit-form object-api-name="Movie__c">
-              <lightning-input-field  variant="label-hidden" field-name={categories} value={category}  onchange={chooseCategory}>
+              <lightning-input-field  variant="label-hidden" field-name={categories} value={category}  onchange={chooseCategory} required>
               </lightning-input-field>
             </lightning-record-edit-form>
           </div> 
@@ -63,10 +67,11 @@
                                  accept=".jpg, .jpeg, .tif, .png"
                                  onchange={openfileUpload}>
                 </lightning-input>
-          
-                <template if:true={fileData}>
+               
+                <template if:true={fileData} style="color:rgb(20, 2, 83);font-weight:bold;">
                     <p>{fileData.filename}</p>
                 </template>
+                <br />
           </div>
           
 
@@ -91,20 +96,24 @@
          
           
           <template for:each={movieActors} for:item="actor">
+            
             <div  class="slds-align_absolute-center  slds-small-size--1-of-1 slds-medium-size--2-of-8 slds-large-size--3-of-13" key={actor}>
-              <label></label>  
+                  <br>
+                  <label></label>  
             </div>  
-               <div  class="slds-small-size--1-of-1 slds-medium-size--5-of-8 slds-large-size--9-of-13" key={actor}>
+            <div  class="slds-small-size--1-of-1 slds-medium-size--5-of-8 slds-large-size--9-of-13" key={actor}>
+                  <br>
                   <lightning-record-edit-form object-api-name="Actor__c"  record-id={actor}>
                       <lightning-input-field class="min-width:90px" variant="label-hidden" field-name={name} readonly="true">
                       </lightning-input-field>
                   </lightning-record-edit-form>
                 </div>
                 <div class="slds-small-size--1-of-1 slds-medium-size--1-of-8 slds-large-size--1-of-13" key={actor}> 
+                      <br>
                       <lightning-button variant="destructive" value={actor} label="-" title="Successful action" onclick={removeActor} class="slds-m-left_x-small">
                       </lightning-button>
-                <br/>
                 </div> 
+                
             </template>
             <br> 
             
@@ -127,166 +136,7 @@
               </div>
             </div>
           </div>
-        </div> 
-</div>
-
-        <!--<div class="slds-form_horizontal slds-form">
-          <div class="slds-grid slds-wrap">
-
-             <div class="slds-col slds-size_1-of-1">
-                <lightning-input type="file" 
-                                 accept=".jpg, .jpeg, .tif, .png"
-                                 label="Movie Picture" onchange={openfileUpload}>
-                </lightning-input>
-          
-                <template if:true={fileData}>
-                    <p>{fileData.filename}</p>
-                </template>
-            </div>
-            
-            <div class="slds-col slds-size_1-of-1">
-              <lightning-input type="text" onchange={changeName} label="Movie's name"></lightning-input>
-            </div>
-
-            <div class="slds-col slds-size_1-of-1">
-              <lightning-textarea name="desc"  onchange={changeDesc} label="Description" ></lightning-textarea>
-            </div>
-
-            <div class="slds-col slds-size_1-of-2">
-              <div>Rating</div>
-            </div>
-
-            <div class="slds-col slds-size_1-of-2">
-              <div class="rate">
-                <input type="radio" id="star5" name={name} value="5" onchange={rating}/>
-                <label for="star5"></label>
-                <input type="radio" id="star4" name={name} value="4" onchange={rating}/>
-                <label for="star4"></label>
-                <input type="radio" id="star3" name={name} value="3" onchange={rating}/>
-                <label for="star3" title="text"></label>
-                <input type="radio" id="star2" name={name} value="2" onchange={rating}/>
-                <label for="star2"></label>
-                <input type="radio" id="star1" name={name} value="1" onchange={rating}/>
-                <label for="star1"></label>
-              </div>
-            </div>
-
-            <div class="slds-col slds-size_1-of-1">
-              <lightning-input type="date" name="input2" label="Release date" onchange={changeReleaseDate} ></lightning-input>
-            </div>
-
-            <div class="slds-col slds-size_1-of-1">
-              <lightning-record-edit-form object-api-name="Movie__c">
-                <lightning-input-field  field-name={categories} value={category}  onchange={chooseCategory}>
-                </lightning-input-field>
-              </lightning-record-edit-form> 
-             </div>
-
-            <div class="slds-col slds-size_7-of-8">
-              <lightning-record-edit-form object-api-name="MovieActor__c">
-                <lightning-input-field variant="label-inline" field-name={actors} value={currentActor} onchange={chooseActor}>
-                </lightning-input-field>
-              </lightning-record-edit-form>
-            </div>
-            
-            <div class="slds-col slds-size_1-of-8">
-              <lightning-button variant="success" label="+" title="add actor" onclick={addActor} class="slds-m-left_x-small">
-              </lightning-button>
-            </div>
-
-           
-             <template for:each={movieActors} for:item="actor">
-        
-              <lightning-record-edit-form object-api-name="Actor__c" key={actor} record-id={actor}>
-                      <lightning-input-field class="min-width:90px" variant="label-inline" field-name={name} readonly="true">
-                      </lightning-input-field>
-  
-                      <lightning-button variant="destructive" value={actor} label="-" title="Successful action" onclick={removeActor} class="slds-m-left_x-small">
-                      </lightning-button>
-              </lightning-record-edit-form>
-  
-            </template>
-
-          </div>
-        
-      </div>-->
-
-
-      <!--*******-->
-      
-      <!--<div class="slds-form">
-
-        <div class="slds-form-element slds-form-element_horizontal">
-          <label class="slds-form-element__label" for="horizontal-input-id-01">Movie Picture</label>
-          <div class="slds-form-element__control">
-            <lightning-input type="file" 
-                  accept=".jpg, .jpeg, .tif, .png"
-                  onchange={openfileUpload}>
-            </lightning-input>
-          </div>
-        </div>
-
-        <div class="slds-form-element slds-form-element_horizontal">
-          <label class="slds-form-element__label" for="horizontal-input-id-02">Movie's name</label>
-          <div class="slds-form-element__control">
-            <lightning-input type="text" onchange={changeName}></lightning-input>
-          </div>
-        </div>
-
-        <div class="slds-form-element slds-form-element_horizontal">
-          <label class="slds-form-element__label" for="horizontal-input-id-03">Description</label>
-          <div class="slds-form-element__control">
-            <lightning-textarea name="desc"  onchange={changeDesc} ></lightning-textarea>
-          </div>
-        </div>
-
-        <div class="slds-form-element slds-form-element_horizontal">
-          <label class="slds-form-element__label" for="horizontal-input-id-05">Release date</label>
-          <div class="slds-form-element__control">
-            <lightning-input type="date" name="input2" onchange={changeReleaseDate} ></lightning-input>
-          </div>
-        </div>
-
-        <div class="slds-form-element slds-form-element_horizontal">
-         <label class="slds-form-element__label" for="horizontal-input-id-05">Category</label>
-          <div class="slds-form-element__control">
-            <lightning-record-edit-form object-api-name="Movie__c">
-              <lightning-input-field  variant="label-hidden" field-name={categories} value={category}  onchange={chooseCategory}>
-              </lightning-input-field>
-            </lightning-record-edit-form> 
-          </div>
-        </div>
-
-        
-
-        <div class="slds-form-element slds-form-element_horizontal">
-          <label class="slds-form-element__label" for="horizontal-input-id-04">Rating</label>
-          <div class="slds-form-element__control">
-            <div class="rate">
-                <input type="radio" id="star5" name={name} value="5" onchange={rating}/>
-                <label for="star5"></label>
-                <input type="radio" id="star4" name={name} value="4" onchange={rating}/>
-                <label for="star4"></label>
-                <input type="radio" id="star3" name={name} value="3" onchange={rating}/>
-                <label for="star3" title="text"></label>
-                <input type="radio" id="star2" name={name} value="2" onchange={rating}/>
-                <label for="star2"></label>
-                <input type="radio" id="star1" name={name} value="1" onchange={rating}/>
-                <label for="star1"></label>
-            </div>
-          </div>
-        </div>
-
-       
-
-  
-
-      </div>-->
-
-     
-
-
-        
+        </div>         
         <!--Footer Section-->  
        <div class="slds-modal__footer">  
           <lightning-button label="New" variant="brand" onclick={createMovie}>  
@@ -298,6 +148,8 @@
       </div>
       </template>
   </template>
+
+
 
   
 </template>

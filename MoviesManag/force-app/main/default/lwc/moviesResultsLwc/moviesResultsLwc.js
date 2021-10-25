@@ -5,6 +5,7 @@ import getMoviesByKey from '@salesforce/apex/SM001_MoviesActors.getMoviesByKey';
 import getAllMovies from '@salesforce/apex/SM001_MoviesActors.getAllMovies';
 
 export default class MoviesResultsLwc extends  NavigationMixin(LightningElement) {
+
     @api movieName;
     @track movies=[];
     @track wiredMovie;
@@ -32,11 +33,13 @@ export default class MoviesResultsLwc extends  NavigationMixin(LightningElement)
                 this.error = this.wiredMovie.error;
             }
         }
+        
 
     @api
     searchMovies(searchKey) {
       this.getMoviesByKey(searchKey);
     }
+
 
     getMoviesByKey(searchKey){
 
@@ -53,7 +56,6 @@ export default class MoviesResultsLwc extends  NavigationMixin(LightningElement)
     
     
     getCurrentMovie(event){
-        console.log('getCurrentMovie');
 
         this.currentmovie=event.currentTarget.dataset.id;
         this[NavigationMixin.Navigate]({
