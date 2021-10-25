@@ -1,0 +1,30 @@
+<template>
+   
+    <lightning-card variant="Narrow">
+
+        <div class="slds-clearfix">
+                <lightning-button variant="brand-outline" label="Create Movie" class="slds-float_right" onclick={createMovie}>
+                </lightning-button>
+        </div>   
+
+        <div class="slds-clearfix">
+                <lightning-input type="search" value={movieName} variant="label-hidden" class="slds-size_1-of-4 slds-align_absolute-center" name="moviesName" placeholder="Search ..."
+                    onchange={handlemovieNameChange}>
+                </lightning-input>
+        </div>
+    
+        <template if:true={showCreateMovieModal}>
+            <c-new-movie-modal-lwc show-create-movie-modal={showCreateMovieModal} onshareclosed={closeCreateMovie}></c-new-movie-modal-lwc>
+        </template>
+
+
+        <c-movies-results-lwc></c-movies-results-lwc>
+        
+
+
+        
+       
+    </lightning-card>
+    
+    
+</template>
