@@ -1,0 +1,4 @@
+<aura:component implements="flexipage:availableForAllPageTypes">
+    <ltng:require scripts="/support/console/52.0/integration.js"/>
+    <lightning:button label="Close" onclick="{!c.closeTab}"/>
+</aura:component>	

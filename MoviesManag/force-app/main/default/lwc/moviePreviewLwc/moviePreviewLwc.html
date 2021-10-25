@@ -1,0 +1,115 @@
+<template>
+
+<!--Displays an animated spinner while deleting/updating record -->
+<template if:true={loading}>
+      <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+</template>
+
+<!-- View movie's details -->
+<template if:true={showMoviePreview}>
+  <lightning-card title="View Movie">
+      <div class="slds-var-m-around_medium">
+          
+              <lightning-record-view-form object-api-name={objectApiName} record-id={recordId} density="compact">
+
+                      <div class="slds-m-left_xx-large">
+                          <lightning-output-field field-name={moviePic} variant="label-hidden"></lightning-output-field>
+                      </div>
+                      <lightning-output-field field-name={name} class="slds-form-element_1-col"></lightning-output-field> 
+                      <lightning-output-field field-name={rating} class="slds-form-element_1-col"></lightning-output-field>
+                      <lightning-output-field field-name={category}  class="slds-form-element_1-col"></lightning-output-field>
+                      <lightning-output-field field-name={maleActorPercentage} class="slds-form-element_1-col"></lightning-output-field>
+                      <lightning-output-field field-name={femeleActorPercentage} class="slds-form-element_1-col"></lightning-output-field>
+                      <lightning-output-field field-name={description} class="slds-form-element_1-col"></lightning-output-field>
+                
+              </lightning-record-view-form>
+          
+      </div>
+      <br><br>
+      <div class="slds-align_absolute-center slds-m-top_xx-large">
+
+                      <lightning-button variant="destructive"
+                                        label="Delete"
+                                        class="slds-m-right_small"
+                                        onclick={deleteMovie}
+                      ></lightning-button>
+                      <lightning-button variant="brand"
+                                        label="Update"
+                                        onclick={updateMovie}
+                      ></lightning-button>
+                    
+      </div>
+      
+  </lightning-card>
+  
+</template>
+
+<!-- Update movie's -->
+<template if:true={showUpdateMovie}>
+  <lightning-card title="Update Record">
+      <div class="slds-p-horizontal_small">
+
+            <lightning-record-edit-form object-api-name={objectApiName}
+                                        record-id={recordId}
+                                        onsuccess={handleSuccess}
+                                        onsubmit={handleSubmit}
+                                        onerror={handleError}>
+
+                  <lightning-layout multiple-rows>
+
+                      <lightning-layout-item size="12">
+                          <lightning-input type="file" 
+                                            accept=".jpg, .jpeg, .tif, .png"
+                                            label="Movie's picture"
+                                            variant="label-inline"
+                                            onchange={chooseFile}>
+                          </lightning-input>
+                      </lightning-layout-item>
+                      
+                     <lightning-layout-item size="4"></lightning-layout-item>
+
+                      <lightning-layout-item size="8">
+                            <template if:true={fileData}>
+                              <p style="color:rgb(20, 2, 83);font-weight:bold;">{fileData.filename}</p>
+                            </template>
+                        </lightning-layout-item>
+
+                      <lightning-layout-item size="12">
+                          <lightning-input-field  field-name={name} required="true" variant="label-inline"></lightning-input-field>
+                      </lightning-layout-item>
+
+                      <lightning-layout-item size="12">
+                          <lightning-input-field field-name={releaseDate} required="true" variant="label-inline"></lightning-input-field>
+                      </lightning-layout-item>
+
+                      <lightning-layout-item size="12">
+                          <lightning-input-field field-name={category} required="true" variant="label-inline"></lightning-input-field>
+                      </lightning-layout-item>
+
+                      <lightning-layout-item size="12">
+                          <lightning-input-field field-name={description} variant="label-inline"></lightning-input-field>
+                      </lightning-layout-item>
+
+                      <lightning-layout-item size="12">
+                          <lightning-input-field field-name={rating} variant="label-inline"></lightning-input-field>
+                      </lightning-layout-item>
+                      
+                      
+
+                      <lightning-layout-item size="12" class="slds-align_absolute-center">
+                            <lightning-button label="Cancel"
+                                              class="slds-m-right_small"
+                                              onclick={backToViewRecord}
+                            ></lightning-button>
+                            <lightning-button type="submit"
+                                              variant="brand"
+                                              label="Save"
+                            ></lightning-button>
+                      </lightning-layout-item>
+
+                  </lightning-layout>
+          </lightning-record-edit-form> 
+      </div> 
+  </lightning-card>
+</template>
+</template>

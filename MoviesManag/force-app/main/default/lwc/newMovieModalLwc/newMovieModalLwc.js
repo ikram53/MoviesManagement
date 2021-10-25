@@ -12,12 +12,17 @@ export default class NewMovieModalLwc extends LightningElement {
     @track actors = ACTORS;
     @track name = NAME;
     @track categories = MoviesCategories;
+    @track loading = false;
 
-    // Toast optionsÒ
+    // Toast options
     title = '';
     message = '';
     variant = '';
-
+    
+    fileData= {
+          'filename': '',
+          'base64': '',
+    }
 
     @track newMovie = {
                Name:"",
@@ -30,12 +35,13 @@ export default class NewMovieModalLwc extends LightningElement {
     @track movieActors =  [];
     currentActor = '';
     category = '';
-    
-   
-   addActor(){
-   
-      if(this.movieActors.find(key => key=== this.currentActor)){
 
+   
+    addActor(){
+
+      console.log('addActor');
+      if(this.movieActors.find(key => key=== this.currentActor)){
+        console.log('1');
         this.title = 'Actor already exist';
         this.message = 'Choose another actor, this actor already exist';
         this.variant = 'error';
@@ -44,7 +50,7 @@ export default class NewMovieModalLwc extends LightningElement {
       } 
 
       else if(this.currentActor.length == 0){
-
+        console.log('2');
         this.title = 'Actor';
         this.message = 'Choose an actor ! ';
         this.variant = 'warning';
@@ -64,7 +70,6 @@ export default class NewMovieModalLwc extends LightningElement {
     
     closeModal() {
         this.showCreateMovieModal = false;
-
         const selectedEvent = new CustomEvent('shareclosed', { });
         this.dispatchEvent(selectedEvent);
     }
@@ -115,17 +120,36 @@ export default class NewMovieModalLwc extends LightningElement {
     }
 
     createMovie(){
-        console.log('createMovie');
-       
-        console.log(JSON.stringify(this.newMovie));
-        createNewMovie({newMovie:this.newMovie ,movieActorsIds:JSON.stringify(this.movieActors)})
+        this.loading = true;
+        createNewMovie({newMovie:this.newMovie ,movieActorsIds:JSON.stringify(this.movieActors),base64:this.fileData.base64,filename:this.fileData.filename})
                    .then(result =>{
-                       console.log('result'+result);
+        
+                       this.title = 'New Movie';
+                       this.message = 'You have successfly create a movie';
+                       this.variant = 'success';
+                       this.showCreateMovieModal = false;
+                       this.showNotification();
+                       this.loading = false;
+                       window.location.reload();
                    })
                    .catch(error =>{
-                       console.log('error'+error);
-                   })
-          
-        
+                       console.log(error);
+                   })   
+    }
+
+
+    /* */
+    openfileUpload(event) {
+        const file = event.target.files[0]
+        this.showLoadingSpinner = true;
+            var reader = new FileReader()
+            reader.onload = () => {
+                var base64 = reader.result.split(',')[1]
+                this.fileData = {
+                    'filename': file.name,
+                    'base64': base64
+                }
+            }
+            reader.readAsDataURL(file)
     }
 }
